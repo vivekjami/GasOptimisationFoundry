@@ -184,8 +184,13 @@ contract GasTest is Test {
         gas.transfer(_recipient, _amount, "name");
         uint256 balAfter = gas.balanceOf(_recipient);
 
-        assertEq(balAfter, balBefore + _amount);
-        assertEq(gas.balanceOf(owner), ownerBal - _amount);
+        if(_recipient == owner) {
+          assertEq(balAfter, balBefore);
+          assertEq(gas.balanceOf(owner), ownerBal);
+        } else {
+          assertEq(balAfter, balBefore + _amount);
+          assertEq(gas.balanceOf(owner), ownerBal - _amount);
+        }
     }
 
     function testAddToWhitelist(address user, uint256 tier) public {
