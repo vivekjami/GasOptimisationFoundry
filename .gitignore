@@ -22,3 +22,7 @@ docs/
 .github/workflows 
 
 *lcov.info
+
+node_modules/.bin/
+
+node_modules/
