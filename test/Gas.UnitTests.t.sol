@@ -4,10 +4,8 @@ pragma solidity ^0.8.20;
 import "forge-std/Test.sol";
 import "../src/Gas.sol";
 
-// interface CheatCodes {
-//    // Gets address for a given private key, (privateKey) => (address)
-//    function addr(uint256) external returns (address);
-// }
+
+
 
 contract GasTest is Test {
     GasContract public gas;
@@ -16,20 +14,36 @@ contract GasTest is Test {
     address addr1 = address(0x5678);
     address addr2 = address(0x9101);
     address addr3 = address(0x1213);
-    //CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
 
     address[] admins = [
-        address(0x3243Ed9fdCDE2345890DDEAf6b083CA4cF0F68f2),
-        address(0x2b263f55Bf2125159Ce8Ec2Bb575C649f822ab46),
-        address(0x0eD94Bc8435F3189966a49Ca1358a55d871FC3Bf),
-        address(0xeadb3d065f8d15cc05e92594523516aD36d1c834), 
+        address(0x1),
+        address(0x2),
+        address(0x3),
+        address(0x4), 
         owner
     ];
 
+
+function get_random_address(uint256 offset) internal returns (address) {
+    uint time_now = vm.unixTime();
+    return (vm.addr(time_now + offset));
+}
+
+
     function setUp() public {
+
+    
+
+        for (uint8 ii = 0; ii < 4 ; ii++){
+            admins[ii]  = get_random_address(ii*3);
+
+           // console.log(admins[ii]);  
+        }
+
         vm.startPrank(owner);
         gas = new GasContract(admins, totalSupply);
         vm.stopPrank();
+
     }
 
     function test_admins() public {
@@ -37,31 +51,6 @@ contract GasTest is Test {
             assertEq(admins[i], gas.administrators(i));
         }
     } 
-
-    // addToWhitelist Tests
-    
-
-function test_randao() public {
-
-    
-    console.log("test log");
-    bytes memory dat = msg.data;
-    console.log(4);
-
-}
-
-
-
-// function test_randao() public {
- 
-    
-//     address testAddr = vm.addr(block.timestamp);
-    
-//     console.log("random addr is");
-//     console.log(testAddr);
-// }
-
-
 
     function test_onlyOwner(address _userAddrs, uint256 _tier) public {
         vm.assume(_userAddrs != address(gas));
@@ -112,12 +101,12 @@ function test_randao() public {
         vm.prank(_sender);
         gas.whiteTransfer(_recipient, _amount);
         (bool a, uint256 b) = gas.getPaymentStatus(address(_sender));
-        console.log(a);
+       // console.log(a);
         assertEq(a, true);
         assertEq(b, _amount);
     }
 
-    // Reverts if teirs out of bounds
+    // Reverts if tiers out of bounds
     function test_tiersReverts(address _userAddrs, uint256 _tier) public {
         vm.assume(_userAddrs != address(gas));
         vm.assume(_tier > 254);
@@ -128,6 +117,7 @@ function test_randao() public {
 
     // Expect Event --> 
     event WhiteListTransfer(address indexed);
+
     function test_whitelistEvents(
         address _recipient,
         address _sender,
@@ -159,13 +149,16 @@ function test_randao() public {
         */
 
     // check balances update 
+   
+   
     function testWhiteTranferAmountUpdate(
-        address _recipient,
-        address _sender,
         uint256 _amount, 
         string calldata _name,
         uint256 _tier
     ) public {
+        address _recipient = get_random_address(23);
+        address _sender = get_random_address(37);
+
         uint256 _preRecipientAmount = gas.balances(_recipient) + 0;
         vm.assume(_recipient != address(0));
         vm.assume(_sender != address(0));
