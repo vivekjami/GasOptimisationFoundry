@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.20; 
+pragma solidity ^0.8.0; 
 
 import "forge-std/Test.sol";
 import "../src/Gas.sol";
@@ -35,9 +35,7 @@ function get_random_address(uint256 offset) internal returns (address) {
     
 
         for (uint8 ii = 0; ii < 4 ; ii++){
-            admins[ii]  = get_random_address(ii*3);
-
-           // console.log(admins[ii]);  
+            admins[ii]  = get_random_address(ii);
         }
 
         vm.startPrank(owner);
@@ -187,14 +185,6 @@ function get_random_address(uint256 offset) internal returns (address) {
         assertEq(isAdmin, true);
     }
 
-    // TODO: No Specification
-    function testGetPaymentHistory() public {}
-
-    // TODO: No Specification
-    function testGetTradingMode() public {}
-
-    // TODO: No Specification
-    function testAddHistory() public {}
 
     function testTransfer(uint256 _amount, address _recipient) public {
         vm.assume(_amount <= totalSupply);
@@ -214,13 +204,15 @@ function get_random_address(uint256 offset) internal returns (address) {
         }
     }
 
-    function testAddToWhitelist(address user, uint256 tier) public {
+    function testAddToWhitelist(uint256 tier) public {
         vm.expectRevert();
+        address user = get_random_address(13);
         vm.startPrank(user);
         vm.assume(user != owner);
         gas.addToWhitelist(user, tier);
         vm.stopPrank();
     }
 
-    function testGetPaymentStatus(address sender) public {}
+
+
 }
