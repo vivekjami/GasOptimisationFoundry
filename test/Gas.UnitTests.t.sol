@@ -44,7 +44,7 @@ function get_random_address(uint256 offset) internal returns (address) {
 
     }
 
-    function test_admins() public {
+    function test_admins() public view {
         for (uint8 i = 0; i < admins.length; ++i) {
             assertEq(admins[i], gas.administrators(i));
         }
@@ -175,12 +175,12 @@ function get_random_address(uint256 offset) internal returns (address) {
         assertEq(gas.balances(_recipient),(_preRecipientAmount + _amount) - gas.whitelist(_sender));
     }
 
-    function testBalanceOf() public {
+    function testBalanceOf() public view {
         uint256 bal = gas.balanceOf(owner);
         assertEq(bal, totalSupply);
     }
 
-    function testCheckForAdmin() public {
+    function testCheckForAdmin() public view {
         bool isAdmin = gas.checkForAdmin(owner);
         assertEq(isAdmin, true);
     }
