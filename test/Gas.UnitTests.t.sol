@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0; 
+pragma solidity ^0.8.20; 
 
 import "forge-std/Test.sol";
 import "../src/Gas.sol";
+
+// interface CheatCodes {
+//    // Gets address for a given private key, (privateKey) => (address)
+//    function addr(uint256) external returns (address);
+// }
 
 contract GasTest is Test {
     GasContract public gas;
@@ -11,6 +16,7 @@ contract GasTest is Test {
     address addr1 = address(0x5678);
     address addr2 = address(0x9101);
     address addr3 = address(0x1213);
+    //CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
 
     address[] admins = [
         address(0x3243Ed9fdCDE2345890DDEAf6b083CA4cF0F68f2),
@@ -34,6 +40,28 @@ contract GasTest is Test {
 
     // addToWhitelist Tests
     
+
+function test_randao() public {
+
+    
+    console.log("test log");
+    bytes memory dat = msg.data;
+    console.log(4);
+
+}
+
+
+
+// function test_randao() public {
+ 
+    
+//     address testAddr = vm.addr(block.timestamp);
+    
+//     console.log("random addr is");
+//     console.log(testAddr);
+// }
+
+
 
     function test_onlyOwner(address _userAddrs, uint256 _tier) public {
         vm.assume(_userAddrs != address(gas));
